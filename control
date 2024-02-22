@@ -1,0 +1,9 @@
+Package: com.huawei.live-wallpaper-exporter
+Name: Live Wallpaper Exporter
+Version: 0.1
+Section: Scripting
+Depends: firmware (>= 17.0)
+Architecture: iphoneos-arm
+Author: Lessica <82flex@gmail.com>
+Maintainer: Lessica <82flex@gmail.com>
+Description: Export Live Wallpapers from PosterBoard caches.
