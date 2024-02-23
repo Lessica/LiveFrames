@@ -48,8 +48,33 @@ static NSURL *MCMGetContainerURL(NSString *containerType, NSString *identifier,
     return self;
 }
 
-- (NSArray<NSString *> *)photoIdentifiers {
+- (NSArray<NSString *> *)posterIdentifiers {
     return [[NSFileManager defaultManager] contentsOfDirectoryAtPath:_dataStorePath error:nil];
+}
+
+- (NSURL *)urlWithPosterIdentifier:(NSString *)posterIdentifier {
+    NSString *posterPath = [_dataStorePath stringByAppendingPathComponent:posterIdentifier];
+    posterPath = [posterPath stringByAppendingPathComponent:@"versions"];
+    NSString *versionName = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:posterPath error:nil] firstObject];
+    NSAssert(versionName.length > 0, @"version not found for %@", posterIdentifier);
+    posterPath = [posterPath stringByAppendingPathComponent:versionName];
+    return [NSURL fileURLWithPath:posterPath];
+}
+
+- (NSURL *)videoBundleURLWithPosterIdentifier:(NSString *)posterIdentifier {
+    NSString *posterPath = [[self urlWithPosterIdentifier:posterIdentifier] path];
+    posterPath = [posterPath stringByAppendingPathComponent:@"contents"];
+    NSArray<NSString *> *contentItems = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:posterPath error:nil];
+    NSString *contentPath = nil;
+    for (NSString *contentItem in contentItems) {
+        if (![[contentItem pathExtension] length]) {
+            contentPath = [posterPath stringByAppendingPathComponent:contentItem];
+            break;
+        }
+    }
+    NSAssert(contentPath.length > 0, @"video not found for %@", posterIdentifier);
+    posterPath = [contentPath stringByAppendingPathComponent:@"output.layerStack"];
+    return [NSURL fileURLWithPath:posterPath];
 }
 
 @end

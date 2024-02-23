@@ -11,7 +11,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PhotosPosterProvider : NSObject
 
-- (NSArray<NSString *> *)photoIdentifiers;
+- (NSArray<NSString *> *)posterIdentifiers;
+- (NSURL *)urlWithPosterIdentifier:(NSString *)posterIdentifier;
+- (NSURL *)videoBundleURLWithPosterIdentifier:(NSString *)posterIdentifier;
 
 @end
 
